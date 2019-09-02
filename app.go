@@ -23,7 +23,7 @@ type shortenReq struct {
 	ExpirationInMinutes int64  `json:"expiration_in_minutes"`
 }
 
-type shorlinkResp struct {
+type shortlinkResp struct {
 	Shortlink string `json:"shorlink"`
 }
 
@@ -63,7 +63,7 @@ func (a *App) createShortlink(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Printf("%v\n", req)
 
-	s, err := a.Config.S.shorten(req.URL, req.ExpirationInMinutes)
+	s, err := a.Config.S.Shorten(req.URL, req.ExpirationInMinutes)
 	if err != nil {
 		respondWithError(w, err)
 	} else {
@@ -75,7 +75,7 @@ func (a *App) getShortlinkInfo(w http.ResponseWriter, r *http.Request) {
 	vals := r.URL.Query()
 	s := vals.Get("shortlink")
 
-	d, err := a.Config.S.getShortlinkInfo(s)
+	d, err := a.Config.S.ShortlinkInfo(s)
 	if err != nil {
 		respondWithError(w, err)
 	} else {

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/sha1"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -12,8 +13,8 @@ import (
 const (
 	// URLIDKEY is global counter
 	URLIDKEY = "next.url.id"
-	// Shortlinkkey mapping the shortlink to the url
-	Shortlinkkey = "shortlink:%s:url"
+	// ShortlinkKey mapping the shortlink to the url
+	ShortlinkKey = "shortlink:%s:url"
 	// URLHashKey mapping the hash of the url to shortlink
 	URLHashKey = "urlhash:%s:url"
 	// ShortlinkDetailKey mapping the shortlink to the detail of url
@@ -28,7 +29,7 @@ type RedisCli struct {
 // URLDetail contains the detail of the shortlink
 type URLDetail struct {
 	URL                 string        `json:"url"`
-	CreatedAt           string        `json"created_at"`
+	CreatedAt           string        `json:"created_at"`
 	ExpirationInMinutes time.Duration `json:"expiration_in_minutes"`
 }
 
@@ -106,7 +107,7 @@ func (r *RedisCli) Shorten(url string, exp int64) (string, error) {
 
 // ShortlinkInfo returns the detail of the shortlink
 func (r *RedisCli) ShortlinkInfo(eid string) (interface{}, error) {
-	d, err := c.Cli.Get(fmt.Sprintf(ShortlinkDetailKey, eid)).Result()
+	d, err := r.Cli.Get(fmt.Sprintf(ShortlinkDetailKey, eid)).Result()
 	if err == redis.Nil {
 		return "", StatusError{404, errors.New("Unknow short URL")}
 	} else if err != nil {
@@ -135,5 +136,5 @@ func toSha1(s string) string {
 
     bs := h.Sum(nil)
 
-	return bs
+	return string(bs)
 }
