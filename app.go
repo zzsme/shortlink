@@ -15,7 +15,7 @@ import (
 type App struct {
 	Router      *mux.Router
 	Middlewares *Middleware
-	config      *Env
+	Config      *Env
 }
 
 type shortenReq struct {
