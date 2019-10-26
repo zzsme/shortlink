@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/go-redis/redis"
+	"github.com/mattheath/base62"
 )
 
 const (
@@ -131,10 +132,10 @@ func (r *RedisCli) Unshorten(eid string) (string, error) {
 
 func toSha1(s string) string {
 
-    h := sha1.New()
-    h.Write([]byte(s))
+	h := sha1.New()
+	h.Write([]byte(s))
 
-    bs := h.Sum(nil)
+	bs := h.Sum(nil)
 
 	return string(bs)
 }
