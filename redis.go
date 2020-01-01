@@ -55,12 +55,11 @@ func (r *RedisCli) Shorten(url string, exp int64) (string, error) {
 	d, err := r.Cli.Get(fmt.Sprintf(URLHashKey, h)).Result()
 	if err != nil {
 		return "", err
+	}
+	if d == "{}" {
+		// expiration, nothing to do
 	} else {
-		if d == "{}" {
-			// expiration, nothing to do
-		} else {
-			return d, nil
-		}
+		return d, nil
 	}
 
 	// increase the global counter
